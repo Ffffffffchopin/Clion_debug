@@ -1,35 +1,41 @@
 #include <iostream>
-#include<string>
+#include<set>
 using namespace std;
 
 class Solution {
 public:
-    static string gcdOfStrings(string str1, string str2) {
-        string ret;
-        string tmp;
-        for(int i=0;i<str2.size();i++){
-            if(str1[i]!=str2[i]){
-                break;
+    int getMaximumConsecutive(vector<int>& coins) {
+        int n=coins.size();
+        set<int> s;
+        s.insert(0);
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<n-i+1;j++){
+                 int tmp=0;
+                for(int k=j;k<j+i;k++){
+                    tmp+=coins[k];
+                }
+                s.insert(tmp);
             }
-           tmp+=str1[i];
-            if(is_divides(str1,tmp)&&is_divides(str2,tmp)){
-                ret=tmp;
+        }
+        int count=1;
+        int pre=0;
+        int ret=1;
+        auto start=s.begin();
+        start++;
+        for(auto it=start;it!=s.end();it++){
+            if(*it!=pre+1){
+                if(count>=ret){
+                    ret=count;
+                }
+                count=0;
+                pre=*it;
             }
-
-
+            else{
+                count++;
+                pre++;
+            }
         }
         return ret;
-    }
-   static bool is_divides(string& a,string& b){
-        int i=0;
-        int n=b.size();
-        while(i<a.size()){
-            if(a.substr(i,n)!=b){
-                return false;
-            }
-            i+=n;
-        }
-        return true;
     }
 };
 
